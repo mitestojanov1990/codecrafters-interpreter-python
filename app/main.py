@@ -21,11 +21,21 @@ def main():
 
     # Uncomment this block to pass the first stage
     if file_contents:
+        return [scan_parentheses(item) for item in file_contents]
         raise NotImplementedError("Scanner not implemented")
     else:
         print(
             "EOF  null"
         )  # Placeholder, remove this line when implementing the scanner
+
+
+def scan_parentheses(item):
+    if "(":
+        return "LEFT_PAREN ( null"
+    elif ")":
+        return "RIGHT_PAREN ) null"
+    else:
+        return "EOF null"
 
 
 if __name__ == "__main__":
