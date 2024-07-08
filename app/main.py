@@ -21,7 +21,7 @@ def main():
 
     # Uncomment this block to pass the first stage
     if file_contents:
-        return [scan_parentheses(item) for item in file_contents]
+        [print(scan_parentheses(item)) for item in file_contents]
         raise NotImplementedError("Scanner not implemented")
     else:
         print(
@@ -30,9 +30,9 @@ def main():
 
 
 def scan_parentheses(item):
-    if "(":
+    if "(" in item:
         return "LEFT_PAREN ( null"
-    elif ")":
+    elif ")" in item:
         return "RIGHT_PAREN ) null"
     else:
         return "EOF null"
