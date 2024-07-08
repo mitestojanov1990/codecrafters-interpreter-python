@@ -56,22 +56,40 @@ def scan_braces(c):
 def scan_string(text):
     line_number = 1
     has_error = False
-    for c in text:
+    for i, c in enumerate(text):
         if c == "\n":
             line_number += 1
         else:
-            ascii_value = ord(c)
-            if ascii_value in readable_names_for_tokens:
-                sign = readable_names_for_tokens.setdefault(ascii_value, None)
-                print(f"{sign} {chr(ascii_value)} null")
+            if c == "=" or c == "!" or c == ">" or c == "<":
+                if text[i + 1] == "=":
+                    operator_sign = readable_names_for_operators.setdefault(
+                        text[i : i + 1], None
+                    )
+                elif c == "=":
+                    operator_sign = readable_names_for_operators.setdefault(c, None)
+
+                print(f"{operator_sign} c null")
             else:
-                print(
-                    f"[line {line_number}] Error: Unexpected character: {c}",
-                    file=sys.stderr,
-                )
-                has_error = True
+                ascii_value = ord(c)
+                if ascii_value in readable_names_for_tokens:
+                    sign = readable_names_for_tokens.setdefault(ascii_value, None)
+                    print(f"{sign} {chr(ascii_value)} null")
+                else:
+                    print(
+                        f"[line {line_number}] Error: Unexpected character: {c}",
+                        file=sys.stderr,
+                    )
+                    has_error = True
     return has_error
 
+
+readable_names_for_operators = {
+    ">=": "GREATER_EQUAL",
+    "<=": "LESS_EQUAL",
+    "==": "EQUAL_EQUAL",
+    "!=": "BANG_EQUAL",
+    "=": "EQUAL",
+}
 
 readable_names_for_tokens = {
     40: "LEFT_PAREN",
