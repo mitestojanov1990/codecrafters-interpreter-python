@@ -69,6 +69,7 @@ readable_names_for_tokens = {
     43: "PLUS",
     44: "COMMA",
     45: "MINUS",
+    46: "DOT",
     59: "SEMICOLON",
     123: "LEFT_BRACE",
     1235: "RIGHT_BRACE",
@@ -80,6 +81,7 @@ single_character_tokens = {
     43: "+",
     44: ",",
     45: "-",
+    46: ".",
     # 47: '/'
     59: ";",
     123: "{",
