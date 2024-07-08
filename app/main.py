@@ -22,7 +22,6 @@ def main():
     # Uncomment this block to pass the first stage
     if file_contents:
         [print(scan_parentheses(item)) for item in file_contents]
-        raise NotImplementedError("Scanner not implemented")
     else:
         print(
             "EOF  null"
