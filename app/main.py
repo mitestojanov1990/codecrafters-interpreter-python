@@ -59,7 +59,8 @@ def get_print_name(ascii):
     sign = readable_names_for_tokens[ascii]
     if len(sign) > 0:
         return sign
-    return ""
+    else:
+        return f"[line 1 Error: Unexpected character: {chr(ascii)}]"
 
 
 readable_names_for_tokens = {
