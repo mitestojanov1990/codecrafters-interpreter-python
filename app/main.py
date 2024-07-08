@@ -21,16 +21,29 @@ def main():
 
     # Uncomment this block to pass the first stage
     if file_contents:
-        [print(scan_parentheses(item)) for item in file_contents]
+        [print(scan_characters(c)) for c in file_contents]
 
     print("EOF  null")  # Placeholder, remove this line when implementing the scanner
 
 
-def scan_parentheses(item):
-    if "(" == item:
+def scan_characters(c):
+    return scan_parentheses(c) + scan_braces(c)
+
+
+def scan_parentheses(c):
+    if "(" == c:
         return "LEFT_PAREN ( null"
-    elif ")" == item:
+    elif ")" == c:
         return "RIGHT_PAREN ) null"
+    else:
+        return
+
+
+def scan_braces(c):
+    if "{" == c:
+        return "LEFT_BRACE ( null"
+    elif "}" == c:
+        return "RIGHT_BRACE ) null"
     else:
         return
 
