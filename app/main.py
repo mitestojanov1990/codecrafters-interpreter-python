@@ -29,9 +29,9 @@ def main():
 
 
 def scan_parentheses(item):
-    if "(" in item:
+    if "(" == item:
         return "LEFT_PAREN ( null"
-    elif ")" in item:
+    elif ")" == item:
         return "RIGHT_PAREN ) null"
     else:
         return "EOF null"
