@@ -62,8 +62,8 @@ def scan_string(text):
         else:
             ascii_value = ord(c)
             if ascii_value in readable_names_for_tokens:
-                sign = readable_names_for_tokens.setdefault(ascii, None)
-                print(f"{sign} {chr(ascii)} null")
+                sign = readable_names_for_tokens.setdefault(ascii_value, None)
+                print(f"{sign} {chr(ascii_value)} null")
             else:
                 print(
                     f"[line {line_number}] Error: Unexpected character: {c}",
