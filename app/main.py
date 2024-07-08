@@ -21,7 +21,9 @@ def main():
 
     # Uncomment this block to pass the first stage
     if file_contents:
-        scan_string(file_contents)
+        res = scan_string(file_contents)
+        if res:
+            exit(65)
 
     print("EOF  null")  # Placeholder, remove this line when implementing the scanner
 
@@ -53,6 +55,7 @@ def scan_braces(c):
 
 def scan_string(text):
     line_number = 1
+    has_error = False
     for c in text:
         if c == "\n":
             line_number += 1
@@ -63,7 +66,8 @@ def scan_string(text):
                 print(f"{sign} {chr(ascii)} null")
             else:
                 print(f"[line {line_number}] Error: Unexpected character: {c}")
-                exit(65)
+                has_error = True
+    return has_error
 
 
 readable_names_for_tokens = {
