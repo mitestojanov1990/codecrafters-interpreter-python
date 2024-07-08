@@ -65,7 +65,10 @@ def scan_string(text):
                 sign = readable_names_for_tokens.setdefault(ascii, None)
                 print(f"{sign} {chr(ascii)} null")
             else:
-                print(f"[line {line_number}] Error: Unexpected character: {c}")
+                print(
+                    f"[line {line_number}] Error: Unexpected character: {c}",
+                    file=sys.stderr,
+                )
                 has_error = True
     return has_error
 
