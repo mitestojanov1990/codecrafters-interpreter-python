@@ -56,6 +56,7 @@ def scan_string(text):
 
 
 def get_print_name(ascii):
+    print(ascii)
     sign = readable_names_for_tokens[ascii]
     if len(sign) > 0:
         return sign
