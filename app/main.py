@@ -56,8 +56,9 @@ def scan_string(text):
 
 
 def get_print_name(ascii):
-    sign = readable_names_for_tokens[ascii]
-    if len(sign) > 0:
+
+    sign = readable_names_for_tokens.setdefault(ascii, None)
+    if sign is not None:
         return sign
     else:
         return f"[line 1 Error: Unexpected character: {chr(ascii)}]"
