@@ -51,5 +51,41 @@ def scan_braces(c):
         my_printer("RIGHT_BRACE } null")
 
 
+def scan_string(text):
+    [print(f"{get_print_name(ord(c))} {c} null") for c in text]
+
+
+def get_print_name(ascii):
+    sign = readable_names_for_tokens[ascii]
+    if len(sign) > 0:
+        return sign
+    return
+
+
+readable_names_for_tokens = {
+    40: "LEFT_PAREN",
+    41: "RIGHT_PAREN",
+    42: "STAR",
+    43: "PLUS",
+    44: "COMMA",
+    45: "MINUS",
+    59: "SEMICOLON",
+    123: "LEFT_BRACE",
+    1235: "RIGHT_BRACE",
+}
+single_character_tokens = {
+    40: "(",
+    41: ")",
+    42: "*",
+    43: "+",
+    44: ",",
+    45: "-",
+    # 47: '/'
+    59: ";",
+    123: "{",
+    125: "}",
+}
+
+
 if __name__ == "__main__":
     main()
