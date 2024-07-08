@@ -22,8 +22,6 @@ def main():
     # Uncomment this block to pass the first stage
     if file_contents:
         res = scan_string(file_contents)
-        if res:
-            exit(65)
 
     print("EOF  null")  # Placeholder, remove this line when implementing the scanner
 
