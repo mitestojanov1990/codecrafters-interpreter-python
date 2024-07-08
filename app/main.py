@@ -21,7 +21,7 @@ def main():
 
     # Uncomment this block to pass the first stage
     if file_contents:
-        [scan_characters(c) for c in file_contents]
+        scan_string(file_contents)
 
     print("EOF  null")  # Placeholder, remove this line when implementing the scanner
 
