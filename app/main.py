@@ -52,16 +52,25 @@ def scan_braces(c):
 
 
 def scan_string(text):
-    [print(get_print_name(ord(c))) for c in text]
+    line_number = 1
+    for c in text:
+        if c == "\n":
+            line_number += 1
+        else:
+            ascii_value = ord(c)
+            if ascii_value in readable_names_for_tokens:
+                print(get_print_name(ascii_value, line_number))
+            else:
+                print(f"[line {line_number}] Error: Unexpected character: {c}")
 
 
-def get_print_name(ascii):
+def get_print_name(ascii, line_number):
 
     sign = readable_names_for_tokens.setdefault(ascii, None)
     if sign is not None:
         return f"{sign} {chr(ascii)} null"
     else:
-        return f"[line 1] Error: Unexpected character: {chr(ascii)}"
+        return f"[line {line_number}] Error: Unexpected character: {chr(ascii)}"
 
 
 readable_names_for_tokens = {
