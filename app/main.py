@@ -46,9 +46,9 @@ def scan_parentheses(c):
 
 def scan_braces(c):
     if "{" == c:
-        my_printer("LEFT_BRACE ( null")
+        my_printer("LEFT_BRACE { null")
     elif "}" == c:
-        my_printer("RIGHT_BRACE ) null")
+        my_printer("RIGHT_BRACE } null")
 
 
 if __name__ == "__main__":
