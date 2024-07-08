@@ -24,6 +24,8 @@ def main():
         res = scan_string(file_contents)
 
     print("EOF  null")  # Placeholder, remove this line when implementing the scanner
+    if res:
+        exit(65)
 
 
 def my_printer(text):
