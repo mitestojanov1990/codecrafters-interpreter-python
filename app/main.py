@@ -22,10 +22,8 @@ def main():
     # Uncomment this block to pass the first stage
     if file_contents:
         [print(scan_parentheses(item)) for item in file_contents]
-    else:
-        print(
-            "EOF  null"
-        )  # Placeholder, remove this line when implementing the scanner
+
+    print("EOF  null")  # Placeholder, remove this line when implementing the scanner
 
 
 def scan_parentheses(item):
@@ -34,7 +32,7 @@ def scan_parentheses(item):
     elif ")" == item:
         return "RIGHT_PAREN ) null"
     else:
-        return "EOF null"
+        return
 
 
 if __name__ == "__main__":
