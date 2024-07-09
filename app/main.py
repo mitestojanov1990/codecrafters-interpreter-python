@@ -58,8 +58,43 @@ TokenType = Enum(
         "EOF",
         "STRING",
         "NUMBER",
+        "IDENTIFIER",
+        "AND",
+        "CLASS",
+        "ELSE",
+        "FALSE",
+        "FUN",
+        "FOR",
+        "IF",
+        "NIL",
+        "OR",
+        "PRINT",
+        "RETURN",
+        "SUPER",
+        "THIS",
+        "TRUE",
+        "VAR",
+        "WHILE",
     ],
 )
+keywords = {
+    "and": TokenType.AND,
+    "class": TokenType.CLASS,
+    "else": TokenType.ELSE,
+    "false": TokenType.FALSE,
+    "fun": TokenType.FUN,
+    "for": TokenType.FOR,
+    "if": TokenType.IF,
+    "nil": TokenType.NIL,
+    "or": TokenType.OR,
+    "print": TokenType.PRINT,
+    "return": TokenType.RETURN,
+    "super": TokenType.SUPER,
+    "this": TokenType.THIS,
+    "true": TokenType.TRUE,
+    "var": TokenType.VAR,
+    "while": TokenType.WHILE,
+}
 
 
 class Token:
@@ -143,12 +178,21 @@ class Scanner:
             case _:
                 if c.isdigit():
                     self.number()
+                elif c.isalpha() or c == "_":
+                    self.identifier()
                 else:
                     print(
                         f"[line {self.line}] Error: Unexpected character: {c}",
                         file=sys.stderr,
                     )
                     self.has_errors = True
+
+    def identifier(self):
+        while self.peek().isalnum() or self.peek() == "_":
+            self.advance()
+        text = self.source[self.start : self.current]
+        token_type = keywords.get(text, TokenType.IDENTIFIER)
+        self.add_token(token_type, "null")
 
     def number(self):
         while self.peek().isdigit():
