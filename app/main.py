@@ -28,58 +28,31 @@ def main():
         exit(65)
 
 
-def my_printer(text):
-    print(text)
-
-
-def scan_characters(c):
-    scan_parentheses(c)
-    scan_braces(c)
-
-
-def scan_parentheses(c):
-    if "(" == c:
-        my_printer("LEFT_PAREN ( null")
-    elif ")" == c:
-        my_printer("RIGHT_PAREN ) null")
-    else:
-        return
-
-
-def scan_braces(c):
-    if "{" == c:
-        my_printer("LEFT_BRACE { null")
-    elif "}" == c:
-        my_printer("RIGHT_BRACE } null")
-
-
 def scan_string(text):
     line_number = 1
     has_error = False
     for i, c in enumerate(text):
         if c == "\n":
             line_number += 1
-        else:
-            if c == "=" or c == "!" or c == ">" or c == "<":
-                if text[i + 1] == "=":
-                    operator_sign = readable_names_for_operators.setdefault(
-                        text[i : i + 1], None
-                    )
-                elif c == "=":
-                    operator_sign = readable_names_for_operators.setdefault(c, None)
+        elif c in "!=<>":
+            if i + 1 < len(text) and text[i + 1] == "=":
+                operator_sign = readable_names_for_operators.setdefault(c + "=", None)
+            elif c == "=":
+                operator_sign = readable_names_for_operators.setdefault(c, None)
 
-                print(f"{operator_sign} c null")
+            print(f"{operator_sign} {c} null")
+        else:
+            ascii_value = ord(c)
+            if ascii_value in readable_names_for_tokens:
+                sign = readable_names_for_tokens.setdefault(ascii_value, None)
+                print(f"{sign} {chr(ascii_value)} null")
             else:
-                ascii_value = ord(c)
-                if ascii_value in readable_names_for_tokens:
-                    sign = readable_names_for_tokens.setdefault(ascii_value, None)
-                    print(f"{sign} {chr(ascii_value)} null")
-                else:
-                    print(
-                        f"[line {line_number}] Error: Unexpected character: {c}",
-                        file=sys.stderr,
-                    )
-                    has_error = True
+                print(
+                    f"[line {line_number}] Error: Unexpected character: {c}",
+                    file=sys.stderr,
+                )
+                has_error = True
+        i += 1
     return has_error
 
 
