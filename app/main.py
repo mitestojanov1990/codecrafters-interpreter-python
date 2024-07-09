@@ -39,9 +39,6 @@ def scan_string(text):
                 operator_sign = readable_names_for_operators.setdefault(c + "=", None)
                 print(f"{operator_sign} {c}= null")
                 i += 1
-            else:
-                operator_sign = readable_names_for_operators.setdefault(c, None)
-                print(f"{operator_sign} {c} null")
 
         else:
             ascii_value = ord(c)
@@ -59,7 +56,6 @@ def scan_string(text):
 
 
 readable_names_for_operators = {
-    "=": "EQUAL",
     ">=": "GREATER_EQUAL",
     "<=": "LESS_EQUAL",
     "==": "EQUAL_EQUAL",
