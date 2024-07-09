@@ -1,8 +1,8 @@
+from enum import Enum
 import sys
 
 
 def main():
-    # You can use print statements as follows for debugging, they'll be visible when running tests.
     print("Logs from your program will appear here!", file=sys.stderr)
 
     if len(sys.argv) < 3:
@@ -16,76 +16,197 @@ def main():
         print(f"Unknown command: {command}", file=sys.stderr)
         exit(1)
 
-    with open(filename) as file:
-        file_contents = file.read()
+    try:
+        with open(filename) as file:
+            file_contents = file.read()
+    except FileNotFoundError:
+        print(f"[line 1] Error: File not found: {filename}", file=sys.stderr)
+        exit(65)
 
-    # Uncomment this block to pass the first stage
-    if file_contents:
-        res = scan_string(file_contents)
+    scanner = Scanner(file_contents)
+    tokens = scanner.scan_tokens()
 
-    print("EOF  null")  # Placeholder, remove this line when implementing the scanner
-    if file_contents and res:
+    for token in tokens:
+        print(token.to_string())
+    print("EOF  null")
+    if scanner.has_errors:
         exit(65)
 
 
-def scan_string(text):
-    line_number = 1
-    has_error = False
-    for i, c in enumerate(text):
-        if c == "\n":
-            line_number += 1
-        elif c in "!=<>" and i + 1 < len(text) and "=" == text[i + 1]:
-            operator_sign = readable_names_for_operators.setdefault(c + "=", None)
-            print(f"{operator_sign} {c}= null")
-        else:
-            ascii_value = ord(c)
-            if ascii_value in readable_names_for_tokens:
-                sign = readable_names_for_tokens.setdefault(ascii_value, None)
-                print(f"{sign} {chr(ascii_value)} null")
-            else:
-                print(
-                    f"[line {line_number}] Error: Unexpected character: {c}",
-                    file=sys.stderr,
+TokenType = Enum(
+    "TokenType",
+    [
+        "LEFT_PAREN",
+        "RIGHT_PAREN",
+        "LEFT_BRACE",
+        "RIGHT_BRACE",
+        "COMMA",
+        "DOT",
+        "MINUS",
+        "PLUS",
+        "SEMICOLON",
+        "SLASH",
+        "STAR",
+        "BANG",
+        "BANG_EQUAL",
+        "EQUAL",
+        "EQUAL_EQUAL",
+        "GREATER",
+        "GREATER_EQUAL",
+        "LESS",
+        "LESS_EQUAL",
+        "EOF",
+        "STRING",
+        "NUMBER",
+    ],
+)
+
+
+class Token:
+    def __init__(self, token_type: str, lexeme, literal, line):
+        self.token_type = token_type
+        self.lexeme = lexeme
+        self.literal = literal
+        self.line = line
+
+    def to_string(self):
+        return f"{self.token_type.name} {self.lexeme} {self.literal}"
+
+
+class Scanner:
+    def __init__(self, source: str):
+        self.source = source
+        self.tokens = []
+        self.start = 0
+        self.current = 0
+        self.line = 1
+        self.has_errors = False
+
+    def scan_tokens(self):
+        while not self.is_at_end():
+            self.start = self.current
+            self.scan_token()
+        # self.tokens.append(Token(TokenType.EOF, "", "null", self.line))
+        return self.tokens
+
+    def scan_token(self):
+        c = self.advance()
+        match c:
+            case "(":
+                self.add_token_without_literal(TokenType.LEFT_PAREN)
+            case ")":
+                self.add_token_without_literal(TokenType.RIGHT_PAREN)
+            case "{":
+                self.add_token_without_literal(TokenType.LEFT_BRACE)
+            case "}":
+                self.add_token_without_literal(TokenType.RIGHT_BRACE)
+            case ",":
+                self.add_token_without_literal(TokenType.COMMA)
+            case ".":
+                self.add_token_without_literal(TokenType.DOT)
+            case "-":
+                self.add_token_without_literal(TokenType.MINUS)
+            case "+":
+                self.add_token_without_literal(TokenType.PLUS)
+            case ";":
+                self.add_token_without_literal(TokenType.SEMICOLON)
+            case "*":
+                self.add_token_without_literal(TokenType.STAR)
+            case "!":
+                self.add_token_without_literal(
+                    TokenType.BANG_EQUAL if self.match("=") else TokenType.BANG
                 )
-                has_error = True
-        i += 1
-    return has_error
+            case "=":
+                self.add_token_without_literal(
+                    TokenType.EQUAL_EQUAL if self.match("=") else TokenType.EQUAL
+                )
+            case "<":
+                self.add_token_without_literal(
+                    TokenType.LESS_EQUAL if self.match("=") else TokenType.LESS
+                )
+            case ">":
+                self.add_token_without_literal(
+                    TokenType.GREATER_EQUAL if self.match("=") else TokenType.GREATER
+                )
+            case "/":
+                if self.match("/"):
+                    while self.peek() != "\n" and not self.is_at_end():
+                        self.advance()
+                else:
+                    self.add_token_without_literal(TokenType.SLASH)
+            case " " | "\r" | "\t":
+                pass  # Ignore whitespace
+            case "\n":
+                self.line += 1
+            case '"':
+                self.string()
+            case _:
+                if c.isdigit():
+                    self.number()
+                else:
+                    print(
+                        f"[line {self.line}] Error: Unexpected character: {c}",
+                        file=sys.stderr,
+                    )
+                    self.has_errors = True
 
+    def number(self):
+        while self.peek().isdigit():
+            self.advance()
 
-readable_names_for_operators = {
-    ">=": "GREATER_EQUAL",
-    "<=": "LESS_EQUAL",
-    "==": "EQUAL_EQUAL",
-    "!=": "BANG_EQUAL",
-}
+        if self.peek() == "." and self.peek_next().isdigit():
+            self.advance()
+            while self.peek().isdigit():
+                self.advance()
 
-readable_names_for_tokens = {
-    40: "LEFT_PAREN",
-    41: "RIGHT_PAREN",
-    42: "STAR",
-    43: "PLUS",
-    44: "COMMA",
-    45: "MINUS",
-    46: "DOT",
-    59: "SEMICOLON",
-    61: "EQUAL",
-    123: "LEFT_BRACE",
-    125: "RIGHT_BRACE",
-}
-single_character_tokens = {
-    40: "(",
-    41: ")",
-    42: "*",
-    43: "+",
-    44: ",",
-    45: "-",
-    46: ".",
-    # 47: '/'
-    59: ";",
-    61: "=",
-    123: "{",
-    125: "}",
-}
+        self.add_token(TokenType.NUMBER, self.source[self.start : self.current])
+
+    def string(self):
+        while self.peek() != '"' and not self.is_at_end():
+            if self.peek() == "\n":
+                self.line += 1
+            self.advance()
+
+        if self.is_at_end():
+            print(f"[line {self.line}] Error: Unterminated string", file=sys.stderr)
+            self.has_errors = True
+            return
+
+        self.advance()
+        value = self.source[self.start + 1 : self.current - 1]
+        self.add_token(TokenType.STRING, value)
+
+    def peek_next(self):
+        if self.current + 1 >= len(self.source):
+            return "\0"
+        return self.source[self.current + 1]
+
+    def peek(self):
+        if self.is_at_end():
+            return "\0"
+        return self.source[self.current]
+
+    def match(self, expected):
+        if self.is_at_end():
+            return False
+        if self.source[self.current] != expected:
+            return False
+        self.current += 1
+        return True
+
+    def is_at_end(self):
+        return self.current >= len(self.source)
+
+    def advance(self):
+        self.current += 1
+        return self.source[self.current - 1]
+
+    def add_token(self, token_type, literal):
+        text = self.source[self.start : self.current]
+        self.tokens.append(Token(token_type, text, literal, self.line))
+
+    def add_token_without_literal(self, token_type):
+        self.add_token(token_type, "null")
 
 
 if __name__ == "__main__":
