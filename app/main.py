@@ -76,6 +76,7 @@ readable_names_for_tokens = {
     59: "SEMICOLON",
     123: "LEFT_BRACE",
     125: "RIGHT_BRACE",
+    "=": "EQUAL",
 }
 single_character_tokens = {
     40: "(",
