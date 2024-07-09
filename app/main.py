@@ -159,7 +159,7 @@ class Scanner:
             while self.peek().isdigit():
                 self.advance()
 
-        self.add_token(TokenType.NUMBER, self.source[self.start : self.current])
+        self.add_token(TokenType.NUMBER, float(self.source[self.start : self.current]))
 
     def string(self):
         while self.peek() != '"' and not self.is_at_end():
