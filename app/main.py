@@ -38,8 +38,9 @@ def scan_string(text):
             if i + 1 < len(text) and text[i + 1] == "=":
                 operator_sign = readable_names_for_operators.setdefault(c + "=", None)
                 print(f"{operator_sign} {c}= null")
-            elif c == "=":
-                operator_sign = readable_names_for_tokens.setdefault(c, None)
+                i += 1
+            else:
+                operator_sign = readable_names_for_operators.setdefault(c, None)
                 print(f"{operator_sign} {c} null")
 
         else:
@@ -58,11 +59,11 @@ def scan_string(text):
 
 
 readable_names_for_operators = {
+    "=": "EQUAL",
     ">=": "GREATER_EQUAL",
     "<=": "LESS_EQUAL",
     "==": "EQUAL_EQUAL",
     "!=": "BANG_EQUAL",
-    "=": "EQUAL",
 }
 
 readable_names_for_tokens = {
@@ -74,9 +75,9 @@ readable_names_for_tokens = {
     45: "MINUS",
     46: "DOT",
     59: "SEMICOLON",
+    61: "EQUAL",
     123: "LEFT_BRACE",
     125: "RIGHT_BRACE",
-    "=": "EQUAL",
 }
 single_character_tokens = {
     40: "(",
@@ -88,6 +89,7 @@ single_character_tokens = {
     46: ".",
     # 47: '/'
     59: ";",
+    61: "=",
     123: "{",
     125: "}",
 }
