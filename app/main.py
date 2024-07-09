@@ -168,7 +168,7 @@ class Scanner:
             self.advance()
 
         if self.is_at_end():
-            print(f"[line {self.line}] Error: Unterminated string", file=sys.stderr)
+            print(f"[line {self.line}] Error: Unterminated string.", file=sys.stderr)
             self.has_errors = True
             return
 
