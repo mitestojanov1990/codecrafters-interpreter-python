@@ -34,12 +34,10 @@ def scan_string(text):
     for i, c in enumerate(text):
         if c == "\n":
             line_number += 1
-        elif c in "!=<>":
-            if i + 1 < len(text) and text[i + 1] == "=":
-                operator_sign = readable_names_for_operators.setdefault(c + "=", None)
-                print(f"{operator_sign} {c}= null")
-                i += 1
-
+        elif c in "!=<>" and i + 1 < len(text) and "=" == text[i + 1]:
+            operator_sign = readable_names_for_operators.setdefault(c + "=", None)
+            print(f"{operator_sign} {c}= null")
+            i += 1
         else:
             ascii_value = ord(c)
             if ascii_value in readable_names_for_tokens:
