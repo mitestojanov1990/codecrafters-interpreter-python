@@ -39,7 +39,7 @@ def scan_string(text):
                 operator_sign = readable_names_for_operators.setdefault(c + "=", None)
                 print(f"{operator_sign} {c}= null")
             elif c == "=":
-                operator_sign = readable_names_for_operators.setdefault(c, None)
+                operator_sign = readable_names_for_tokens.setdefault(c, None)
                 print(f"{operator_sign} {c} null")
 
         else:
